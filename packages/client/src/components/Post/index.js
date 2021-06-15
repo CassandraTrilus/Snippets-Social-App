@@ -15,6 +15,7 @@ import { timeSince } from 'utils/timeSince'
 import { LikeIcon, LikeIconFill, ReplyIcon, TrashIcon } from 'components'
 import './Post.scss'
 import { toast } from 'react-toastify'
+import { render } from '@testing-library/react'
 
 const initialState = {
   commentText: '',
@@ -24,7 +25,7 @@ const initialState = {
 export default function Post({
   post: { _id, author, profile_image, text, comments, created, likes },
   detail,
-  userDetail
+  userDetail, handleRerender,
 }) {
   const [data, setData] = useState(initialState)
   const [validated, setValidated] = useState(false)
@@ -65,10 +66,15 @@ export default function Post({
   }
 
   // Complete function to call server endpoint /posts/:id
-  // with delete request
+
   const handleDeletePost = async () => {
-    console.log('Delete post', _id)
+    await axios.delete(`/posts/${_id}`,
+    { data: { userId: user.uid }})
+    toast.success("Post deleted")
+    handleRerender()
   }
+
+
 
   const handleCommentSubmit = async (event) => {
     const form = event.currentTarget
@@ -184,7 +190,7 @@ export default function Post({
               value={data.commentText}
               onChange={handleInputChange}
             />
-             <Button
+            <Button
                 className='float-right mt-3'
                 type='submit'
               >Comment</Button>
