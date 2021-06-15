@@ -126,11 +126,15 @@ export default function Post({
             className='mr-4 bg-border-color rounded-circle overflow-hidden ml-2 p-1'
             style={{ height: '50px', width: '50px', marginTop: '0px'}}
           >
+          <Link to={`/u/${author.username}`}>
             <Figure.Image src={author.profile_image} className='w-100 h-100' />
+          </Link>
           </Figure>
           <Media.Body className='w-50'>
             <div className='row d-flex align-items-center'>
+            <Link to={`/u/${author.username}`}>
               <span className='text-muted mr-1 username'>@{author.username}</span>
+            </Link>
               <pre className='m-0 text-muted'>{' - '}</pre>
               <span className='text-muted'>{timeSince(created)} ago</span>
             </div>
