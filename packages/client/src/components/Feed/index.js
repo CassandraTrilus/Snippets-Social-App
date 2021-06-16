@@ -98,6 +98,8 @@ export default function Feed() {
     getPosts()
   }, [rerender])
 
+  //Jobin and Mike helped me with the ternary below in the render
+
   return (
     <>
       <Container className='pt-3 pb-3 clearfix'>
@@ -142,8 +144,8 @@ export default function Feed() {
         />
       </Form>
     </Container>
-    
-//Jobin and Mike helped me with the ternary below
+
+
       {!postLoading ? (
         <Container
           className='pt-3 pb-3'
