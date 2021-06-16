@@ -23,7 +23,7 @@ export default function Feed() {
   const [data, setData] = useState(initialState)
   const [validated, setValidated] = useState(false)
   const [rerender, setRerender] = useState(true)
-  const [searchData, setSearchData] = useState(" ")
+  const [searchData, setSearchData] = useState("")
 
   const handleRerender = () => {
     setRerender(!rerender)
@@ -142,15 +142,21 @@ export default function Feed() {
         />
       </Form>
     </Container>
-
+    
+//Jobin and Mike helped me with the ternary below
       {!postLoading ? (
         <Container
           className='pt-3 pb-3'
         >
           <h6>Recent Snips</h6>
           {postError && 'Error fetching posts'}
-          {posts &&
-            posts.map((post) => <Post key={post._id} post={post} handleRerender={handleRerender} />)}
+          {posts && searchData === "" ?
+            posts.map((post) => <Post key={post._id} post={post} handleRerender={handleRerender} />) 
+            : posts.map((post) => {
+              if(post.text.includes(searchData)) {
+                return <Post key={post._id} post={post} handleRerender={handleRerender} />
+              }
+            })}
         </Container>
       ) : (
         <LoadingSpinner full />
