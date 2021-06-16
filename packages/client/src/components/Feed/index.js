@@ -23,6 +23,7 @@ export default function Feed() {
   const [data, setData] = useState(initialState)
   const [validated, setValidated] = useState(false)
   const [rerender, setRerender] = useState(true)
+  const [searchData, setSearchData] = useState(" ")
 
   const handleRerender = () => {
     setRerender(!rerender)
@@ -34,6 +35,7 @@ export default function Feed() {
       [event.target.name]: event.target.value,
     })
   }
+
 
   const handlePostSubmit = async (event) => {
     const form = event.currentTarget
@@ -130,6 +132,16 @@ export default function Feed() {
           </Button>
         </Form>
       </Container>
+
+      <Container>
+      <Form className="search-bar">
+        <input
+          placeholder="Search"
+          value={searchData}
+          onChange={(e) => setSearchData(e.target.value)}
+        />
+      </Form>
+    </Container>
 
       {!postLoading ? (
         <Container
