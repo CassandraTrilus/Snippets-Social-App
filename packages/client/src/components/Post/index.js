@@ -7,6 +7,7 @@ import {
   Media,
   Figure,
   ListGroup,
+  Modal,
 } from 'react-bootstrap'
 import useRouter from 'hooks/useRouter'
 import { useProvideAuth } from 'hooks/useAuth'
@@ -27,6 +28,7 @@ export default function Post({
   detail,
   userDetail, handleRerender,
 }) {
+  const [confirmation, setConfirmation] = useState(false)
   const [data, setData] = useState(initialState)
   const [validated, setValidated] = useState(false)
   const [stateComments, setStateComments] = useState(comments)
@@ -68,6 +70,7 @@ export default function Post({
   // Complete function to call server endpoint /posts/:id
 
   const handleDeletePost = async () => {
+    setConfirmation(false)
     await axios.delete(`/posts/${_id}`,
     { data: { userId: user.uid }})
     toast.success("Post deleted")
@@ -116,11 +119,27 @@ export default function Post({
 
   return (
     <>
-      <ListGroup.Item
-        className='bg-white text-danger px-3 rounded-edge'
-        as={'div'}
-        key={_id}
-      >
+    <ListGroup.Item
+      className='bg-white text-danger px-3 rounded-edge'
+      as={'div'}
+      key={_id}
+    >
+
+        <Modal size="lg" show={confirmation} onHide={() => setConfirmation(false)}>
+          <Modal.Header closeButton style={{color: "black"}}>
+            <Modal.Title>Delete?</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body style={{color:"black"}}>
+            Are you sure you want to delete this post?
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="primary" onClick={handleDeletePost}>Delete</Button>
+            <Button variant="secondary"onClick={() => setConfirmation(false)}>Cancel</Button>
+          </Modal.Footer>
+        </Modal>
+
         <Media className='mb-n2 w-100'>
           <Figure
             className='mr-4 bg-border-color rounded-circle overflow-hidden ml-2 p-1'
@@ -150,7 +169,7 @@ export default function Post({
               <div className='d-flex align-items-center'>
                 {user.username === author.username && (
                   <Container className='close'>
-                    <TrashIcon onClick={handleDeletePost} />
+                    <TrashIcon onClick={() => setConfirmation(true)} />
                   </Container>
                 )}
               </div>
