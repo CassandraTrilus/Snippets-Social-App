@@ -136,7 +136,7 @@ export default function Post({
 
           <Modal.Footer>
             <Button variant="primary" onClick={handleDeletePost}>Delete</Button>
-            <Button variant="secondary"onClick={() => setConfirmation(false)}>Cancel</Button>
+            <Button variant="secondary" onClick={() => setConfirmation(false)}>Cancel</Button>
           </Modal.Footer>
         </Modal>
 
