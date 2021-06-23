@@ -11,6 +11,7 @@ import useRouter from 'hooks/useRouter'
 import { useProvideAuth } from 'hooks/useAuth'
 import { LandingHeader, LoadingSpinner } from 'components'
 import { setAuthToken } from 'utils/axiosConfig'
+import AvatarPicker from 'components/AvatarPicker'
 
 const initialState = {
   username: '',
@@ -120,6 +121,7 @@ export default function RegisterPage() {
                     value={data.password}
                     onChange={handleInputChange}
                 />
+                  <AvatarPicker selector={(avatar) => setProfileImage(avatar)} />
                 </Form.Group>
                 {data.errorMessage && (
                 <span className='form-error text-warning'>{data.errorMessage}</span>

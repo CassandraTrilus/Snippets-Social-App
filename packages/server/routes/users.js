@@ -24,7 +24,7 @@ router
     }
   })
   .put(async (request, response) => {
-    const { password } = request.body
+    const { password, profile_image } = request.body
     const { id } = request.params
 
     const hashedpassword = await bcrypt.hash(password, 12)
@@ -36,9 +36,11 @@ router
         },
         {
           passwordHash: hashedpassword,
+          profile_image: profile_image,
         },
         {
           new: true,
+          strict: false,
         }
       )
 

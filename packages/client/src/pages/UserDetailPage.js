@@ -11,6 +11,7 @@ import { LoadingSpinner, Post } from 'components'
 import { useProvideAuth } from 'hooks/useAuth'
 import { useRequireAuth } from 'hooks/useRequireAuth'
 import axios from 'utils/axiosConfig.js'
+import AvatarPicker from '../components/AvatarPicker'
 
 export default function UserDetailPage({
   match: {
@@ -23,6 +24,7 @@ export default function UserDetailPage({
   const [loading, setLoading] = useState(true)
   const [validated, setValidated] = useState(false)
   const [open, setOpen] = useState(false)
+  const [profileImage, setProfileImage] = useState(' ')
   const [data, setData] = useState({
     password: '',
     isSubmitting: false,
@@ -75,6 +77,8 @@ export default function UserDetailPage({
       console.log(data.password, uid, username)
       setValidated(false)
       // don't forget to update loading state and alert success
+      
+      await axios.put(`users/${uid}`, {profile_image: profileImage, password: data.password})
     } catch (error) {
       setData({
         ...data,
@@ -144,6 +148,7 @@ export default function UserDetailPage({
                       <Form.Text id='passwordHelpBlock' muted>
                         Must be 8-20 characters long.
                       </Form.Text>
+                      <AvatarPicker selector={(avatar) => setProfileImage(avatar)} />
                     </Form.Group>
 
                     {data.errorMessage && (
