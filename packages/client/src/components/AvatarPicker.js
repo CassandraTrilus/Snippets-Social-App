@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import './App.css'
 
 const AvatarPicker = ({ handleProfileImage }) => {
   const avatars = [
@@ -11,7 +12,7 @@ const AvatarPicker = ({ handleProfileImage }) => {
     "whale.svg",
   ]
 
-  const [selectedImage, setSelectedImage] = useState("")
+  const [selectedImage, setSelectedImage] = useState(" ")
 
   //jobin helped me with the event handlers
 
@@ -31,7 +32,7 @@ const AvatarPicker = ({ handleProfileImage }) => {
                 src={avatar}
                 key={avatar}
                 alt={avatar}
-                width="75px"
+                width="60px"
                 onClick={() => selectHandler(avatar)}
               />
             </div>
@@ -43,7 +44,7 @@ const AvatarPicker = ({ handleProfileImage }) => {
               src={avatar}
               key={avatar}
               alt={avatar}
-              width="75px"
+              width="60px"
               onClick={() => selectHandler(avatar)}
               />
             </div>
