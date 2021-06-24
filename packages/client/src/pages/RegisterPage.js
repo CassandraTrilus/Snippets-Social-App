@@ -50,6 +50,10 @@ export default function RegisterPage() {
     })
   }
 
+  const handleProfileImage = (img) => {
+    setProfileImage(img)
+  }
+
   const handleSignup = async (event) => {
     const form = event.currentTarget
     event.preventDefault()
@@ -121,7 +125,7 @@ export default function RegisterPage() {
                     value={data.password}
                     onChange={handleInputChange}
                 />
-                  <AvatarPicker selector={(avatar) => setProfileImage(avatar)} />
+                  <AvatarPicker handleProfileImage={handleProfileImage} />
                 </Form.Group>
                 {data.errorMessage && (
                 <span className='form-error text-warning'>{data.errorMessage}</span>

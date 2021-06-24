@@ -1,29 +1,55 @@
-import React from 'react'
+import React, { useState } from 'react'
 
-const avatars = [
-  "/bird.svg",
-  "/dog.svg",
-  "/fox.svg",
-  "/lion.svg",
-  "/owl.svg",
-  "/tiger.svg",
-  "whale.svg",
-]
+const AvatarPicker = ({ handleProfileImage }) => {
+  const avatars = [
+    "/bird.svg",
+    "/dog.svg",
+    "/fox.svg",
+    "/lion.svg",
+    "/owl.svg",
+    "/tiger.svg",
+    "whale.svg",
+  ]
 
-function AvatarPicker({ selector }) {
+  const [selectedImage, setSelectedImage] = useState("")
+
+  //jobin helped me with the event handlers
+
+  const selectHandler = (img) => {
+    handleProfileImage(img)
+    setSelectedImage(img)
+  }
+
   return (
     <div>
-      <h6>Choose your profile avatar:</h6>
-      <div></div>
-        {avatars.map((avatar) => (
-          <img 
-            src={avatar}
-            key={avatar}
-            alt={avatar}
-            width="75px"
-          onClick={() => selector(avatar)}
-          />
-        ))}
+    <h5>Choose your profile avatar:</h5>
+      {avatars && avatars.map((avatar) => {
+        if(avatar === selectedImage) {
+          return (
+            <div className="selected">
+              <img 
+                src={avatar}
+                key={avatar}
+                alt={avatar}
+                width="75px"
+                onClick={() => selectHandler(avatar)}
+              />
+            </div>
+          )
+        } else {
+          return (
+            <div>
+              <img 
+              src={avatar}
+              key={avatar}
+              alt={avatar}
+              width="75px"
+              onClick={() => selectHandler(avatar)}
+              />
+            </div>
+          )
+        }
+      })}
     </div>
   )
 }

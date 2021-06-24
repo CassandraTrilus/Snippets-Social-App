@@ -55,6 +55,10 @@ export default function UserDetailPage({
     })
   }
 
+  const handleProfileImage = (img) => {
+    setProfileImage(img)
+  }
+
   const handleUpdatePassword = async (event) => {
     event.preventDefault()
     event.stopPropagation()
@@ -77,7 +81,7 @@ export default function UserDetailPage({
       console.log(data.password, uid, username)
       setValidated(false)
       // don't forget to update loading state and alert success
-      
+
       await axios.put(`users/${uid}`, {profile_image: profileImage, password: data.password})
     } catch (error) {
       setData({
@@ -148,7 +152,8 @@ export default function UserDetailPage({
                       <Form.Text id='passwordHelpBlock' muted>
                         Must be 8-20 characters long.
                       </Form.Text>
-                      <AvatarPicker selector={(avatar) => setProfileImage(avatar)} />
+                      <AvatarPicker 
+                      handleProfileImage={handleProfileImage} />
                     </Form.Group>
 
                     {data.errorMessage && (
