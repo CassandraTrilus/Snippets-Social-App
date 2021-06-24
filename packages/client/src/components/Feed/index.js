@@ -22,6 +22,11 @@ export default function Feed() {
 
   const [data, setData] = useState(initialState)
   const [validated, setValidated] = useState(false)
+  const [rerender, setRerender] = useState(true)
+
+  const handleRerender = () => {
+    setRerender(!rerender)
+  }
 
   const handleInputChange = (event) => {
     setData({
@@ -75,6 +80,7 @@ export default function Feed() {
       )
   }
 
+
   useEffect(() => {
     const getPosts = async () => {
       try {
@@ -88,7 +94,7 @@ export default function Feed() {
       }
     }
     getPosts()
-  }, [])
+  }, [rerender])
 
   return (
     <>
@@ -132,7 +138,7 @@ export default function Feed() {
           <h6>Recent Snips</h6>
           {postError && 'Error fetching posts'}
           {posts &&
-            posts.map((post) => <Post key={post._id} post={post} />)}
+            posts.map((post) => <Post key={post._id} post={post} handleRerender={handleRerender} />)}
         </Container>
       ) : (
         <LoadingSpinner full />

@@ -10,6 +10,8 @@ import router from './routes'
 import { requestLogger, errorHandler } from './middleware'
 import seedDatabase from './seedDatabase'
 
+
+
 const createError = require('http-errors')
 
 mongoose.connect(keys.database.url, {
@@ -29,6 +31,8 @@ mongoose.connection.on('error', (err) => {
 })
 
 const app = express()
+const morgan = require('morgan')
+app.use(morgan(':method :url :status :res[content-length]'))
 
 // middleware
 app.use(logger('dev'))

@@ -7,6 +7,7 @@ import {
   Media,
   Figure,
   ListGroup,
+  Modal,
 } from 'react-bootstrap'
 import useRouter from 'hooks/useRouter'
 import { useProvideAuth } from 'hooks/useAuth'
@@ -15,6 +16,7 @@ import { timeSince } from 'utils/timeSince'
 import { LikeIcon, LikeIconFill, ReplyIcon, TrashIcon } from 'components'
 import './Post.scss'
 import { toast } from 'react-toastify'
+import { render } from '@testing-library/react'
 
 const initialState = {
   commentText: '',
@@ -24,8 +26,9 @@ const initialState = {
 export default function Post({
   post: { _id, author, profile_image, text, comments, created, likes },
   detail,
-  userDetail
+  userDetail, handleRerender,
 }) {
+  const [confirmation, setConfirmation] = useState(false)
   const [data, setData] = useState(initialState)
   const [validated, setValidated] = useState(false)
   const [stateComments, setStateComments] = useState(comments)
@@ -65,10 +68,16 @@ export default function Post({
   }
 
   // Complete function to call server endpoint /posts/:id
-  // with delete request
+
   const handleDeletePost = async () => {
-    console.log('Delete post', _id)
+    setConfirmation(false)
+    await axios.delete(`/posts/${_id}`,
+    { data: { userId: user.uid }})
+    toast.success("Post deleted")
+    handleRerender()
   }
+
+
 
   const handleCommentSubmit = async (event) => {
     const form = event.currentTarget
@@ -110,21 +119,41 @@ export default function Post({
 
   return (
     <>
-      <ListGroup.Item
-        className='bg-white text-danger px-3 rounded-edge'
-        as={'div'}
-        key={_id}
-      >
+    <ListGroup.Item
+      className='bg-white text-danger px-3 rounded-edge'
+      as={'div'}
+      key={_id}
+    >
+
+        <Modal size="lg" show={confirmation} onHide={() => setConfirmation(false)}>
+          <Modal.Header closeButton style={{color: "black"}}>
+            <Modal.Title>Delete?</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Body style={{color:"black"}}>
+            Are you sure you want to delete this post?
+          </Modal.Body>
+
+          <Modal.Footer>
+            <Button variant="primary" onClick={handleDeletePost}>Delete</Button>
+            <Button variant="secondary"onClick={() => setConfirmation(false)}>Cancel</Button>
+          </Modal.Footer>
+        </Modal>
+
         <Media className='mb-n2 w-100'>
           <Figure
             className='mr-4 bg-border-color rounded-circle overflow-hidden ml-2 p-1'
             style={{ height: '50px', width: '50px', marginTop: '0px'}}
           >
+          <Link to={`/u/${author.username}`}>
             <Figure.Image src={author.profile_image} className='w-100 h-100' />
+          </Link>
           </Figure>
           <Media.Body className='w-50'>
             <div className='row d-flex align-items-center'>
+            <Link to={`/u/${author.username}`}>
               <span className='text-muted mr-1 username'>@{author.username}</span>
+            </Link>
               <pre className='m-0 text-muted'>{' - '}</pre>
               <span className='text-muted'>{timeSince(created)} ago</span>
             </div>
@@ -140,7 +169,7 @@ export default function Post({
               <div className='d-flex align-items-center'>
                 {user.username === author.username && (
                   <Container className='close'>
-                    <TrashIcon onClick={handleDeletePost} />
+                    <TrashIcon onClick={() => setConfirmation(true)} />
                   </Container>
                 )}
               </div>
@@ -184,7 +213,7 @@ export default function Post({
               value={data.commentText}
               onChange={handleInputChange}
             />
-             <Button
+            <Button
                 className='float-right mt-3'
                 type='submit'
               >Comment</Button>
