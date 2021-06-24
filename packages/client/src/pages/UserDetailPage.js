@@ -27,6 +27,7 @@ export default function UserDetailPage({
   const [profileImage, setProfileImage] = useState(' ')
   const [data, setData] = useState({
     password: '',
+    currentPassword: "",
     isSubmitting: false,
     errorMessage: null,
   })
@@ -138,12 +139,20 @@ export default function UserDetailPage({
                     onSubmit={handleUpdatePassword}
                   >
                     <Form.Group>
+                      <Form.Label htmlFor='current password'>Current Password</Form.Label>
+                      <Form.Control
+                        type='password'
+                        name='password'
+                        required
+                        value={data.currentPassword}
+                        onChange={handleInputChange}
+                      />
                       <Form.Label htmlFor='password'>New Password</Form.Label>
                       <Form.Control
                         type='password'
                         name='password'
                         required
-                        value={data.password}
+                        value={data.newPassword}
                         onChange={handleInputChange}
                       />
                       <Form.Control.Feedback type='invalid'>

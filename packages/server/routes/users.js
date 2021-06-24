@@ -3,6 +3,7 @@ import bcrypt from 'bcryptjs'
 import { User } from '../models'
 
 const router = express.Router()
+const requireAuth = require('../requireAuth')
 
 router
   .route('/:id')
@@ -23,11 +24,18 @@ router
       response.status(404).end()
     }
   })
-  .put(async (request, response) => {
-    const { password, profile_image } = request.body
+  .put(requireAuth(async (request, response) => {
+    const { currentPassword, newPassword, profile_image } = request.body
     const { id } = request.params
+    const { user } = request
 
-    const hashedpassword = await bcrypt.hash(password, 12)
+    const hashedpassword = await bcrypt.hash(newPassword, 12)
+
+    const match = bcrypt.compare(currentPassword, user.passwordHash)
+
+    if(!match) {
+      response.status(401).json({ err: "Your password is incorrect" })
+    }
 
     try {
       const userUpdate = await User.findByIdAndUpdate(
@@ -48,6 +56,6 @@ router
     } catch (error) {
       response.status(404).end()
     }
-  })
+  }))
 
 module.exports = router
