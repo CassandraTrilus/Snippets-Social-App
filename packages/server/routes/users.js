@@ -1,9 +1,10 @@
 import express from 'express'
 import bcrypt from 'bcryptjs'
 import { User } from '../models'
+import { requireAuth } from '../middleware'
 
 const router = express.Router()
-const requireAuth = require('../requireAuth')
+
 
 router
   .route('/:id')
@@ -24,7 +25,7 @@ router
       response.status(404).end()
     }
   })
-  .put(requireAuth(async (request, response) => {
+  .put(requireAuth, (async (request, response) => {
     const { currentPassword, newPassword, profile_image } = request.body
     const { id } = request.params
     const { user } = request

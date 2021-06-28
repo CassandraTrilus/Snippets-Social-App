@@ -29,7 +29,7 @@ router.post('/signup', async (req, res) => {
           username,
           passwordHash: hashedpassword,
           profile_image: profile_image,
-          email
+          email: email
         })
 
         user
@@ -49,6 +49,7 @@ router.post('/signup', async (req, res) => {
 
 router.post('/signin', async (req, res) => {
   const { username, password } = req.body
+
   if (!username || !password) {
     return res.status(422).json({ error: 'missing username or password' })
   }
