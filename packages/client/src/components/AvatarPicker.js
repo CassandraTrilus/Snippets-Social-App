@@ -9,7 +9,7 @@ const AvatarPicker = ({ handleProfileImage }) => {
     "/lion.svg",
     "/owl.svg",
     "/tiger.svg",
-    "whale.svg",
+    "/whale.svg",
   ]
 
   const [selectedImage, setSelectedImage] = useState(" ")
