@@ -11,10 +11,12 @@ import useRouter from 'hooks/useRouter'
 import { useProvideAuth } from 'hooks/useAuth'
 import { LandingHeader, LoadingSpinner } from 'components'
 import { setAuthToken } from 'utils/axiosConfig'
+import AvatarPicker from 'components/AvatarPicker'
 
 const initialState = {
   username: '',
   password: '',
+  email: '',
   isSubmitting: false,
   errorMessage: null,
 }
@@ -49,6 +51,10 @@ export default function RegisterPage() {
     })
   }
 
+  const handleProfileImage = (img) => {
+    setProfileImage(img)
+  }
+
   const handleSignup = async (event) => {
     const form = event.currentTarget
     event.preventDefault()
@@ -64,7 +70,7 @@ export default function RegisterPage() {
     })
     setProfileImage(getRandomProfileUrl())
     try {
-      const res = await auth.signup(data.username, data.password, profileImage)
+      const res = await auth.signup(data.username, data.password, data.email, profileImage)
       setData({
         ...data,
         isSubmitting: false,
@@ -93,6 +99,23 @@ export default function RegisterPage() {
                 onSubmit={handleSignup}
             >
                 <h3 className="mb-3">Join Us!</h3>
+                <Form.Group controlId='email-register'>
+                <Form.Label>Email</Form.Label>
+                <InputGroup>
+                  <InputGroup.Prepend>
+                    <InputGroup.Text id='inputGroupPrepend'>@</InputGroup.Text>
+                  </InputGroup.Prepend>
+                    <Form.Control
+                    type='text'
+                    name='email'
+                    placeholder='Email'
+                    aria-describedby='inputGroupPrepend'
+                    required
+                    value={data.email}
+                    onChange={handleInputChange}
+                    />
+                </InputGroup>
+                </Form.Group>
                 <Form.Group controlId='username-register'>
                 <Form.Label>Username</Form.Label>
                 <InputGroup>
@@ -120,6 +143,7 @@ export default function RegisterPage() {
                     value={data.password}
                     onChange={handleInputChange}
                 />
+                  <AvatarPicker handleProfileImage={handleProfileImage} />
                 </Form.Group>
                 {data.errorMessage && (
                 <span className='form-error text-warning'>{data.errorMessage}</span>

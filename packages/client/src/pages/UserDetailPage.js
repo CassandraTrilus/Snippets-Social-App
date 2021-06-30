@@ -11,6 +11,7 @@ import { LoadingSpinner, Post } from 'components'
 import { useProvideAuth } from 'hooks/useAuth'
 import { useRequireAuth } from 'hooks/useRequireAuth'
 import axios from 'utils/axiosConfig.js'
+import AvatarPicker from '../components/AvatarPicker'
 
 export default function UserDetailPage({
   match: {
@@ -23,8 +24,10 @@ export default function UserDetailPage({
   const [loading, setLoading] = useState(true)
   const [validated, setValidated] = useState(false)
   const [open, setOpen] = useState(false)
+  const [profileImage, setProfileImage] = useState(' ')
   const [data, setData] = useState({
     password: '',
+    currentPassword: "",
     isSubmitting: false,
     errorMessage: null,
   })
@@ -53,6 +56,10 @@ export default function UserDetailPage({
     })
   }
 
+  const handleProfileImage = (img) => {
+    setProfileImage(img)
+  }
+
   const handleUpdatePassword = async (event) => {
     event.preventDefault()
     event.stopPropagation()
@@ -75,6 +82,8 @@ export default function UserDetailPage({
       console.log(data.password, uid, username)
       setValidated(false)
       // don't forget to update loading state and alert success
+
+      await axios.put(`users/${uid}`, {profile_image: profileImage, password: data.password})
     } catch (error) {
       setData({
         ...data,
@@ -117,6 +126,7 @@ export default function UserDetailPage({
             />
           </Figure>
           <Card.Title>{uid}</Card.Title>
+          <h6>{user.email}</h6>
           {state.user.username === uid && (
             <div onClick={() => setOpen(!open)} style={{cursor: 'pointer', color: '#BFBFBF'}}>Edit Password</div>
           )}
@@ -130,12 +140,20 @@ export default function UserDetailPage({
                     onSubmit={handleUpdatePassword}
                   >
                     <Form.Group>
+                      <Form.Label htmlFor='current password'>Current Password</Form.Label>
+                      <Form.Control
+                        type='password'
+                        name='password'
+                        required
+                        value={data.currentPassword}
+                        onChange={handleInputChange}
+                      />
                       <Form.Label htmlFor='password'>New Password</Form.Label>
                       <Form.Control
                         type='password'
                         name='password'
                         required
-                        value={data.password}
+                        value={data.newPassword}
                         onChange={handleInputChange}
                       />
                       <Form.Control.Feedback type='invalid'>
@@ -144,6 +162,8 @@ export default function UserDetailPage({
                       <Form.Text id='passwordHelpBlock' muted>
                         Must be 8-20 characters long.
                       </Form.Text>
+                      <AvatarPicker 
+                      handleProfileImage={handleProfileImage} />
                     </Form.Group>
 
                     {data.errorMessage && (

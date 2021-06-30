@@ -56,11 +56,12 @@ export function useProvideAuth() {
   const { state, dispatch } = useAuth()
   const router = useRouter()
 
-  const signin = async (username, password) => {
+  const signin = async (username, password, email) => {
     try {
       const response = await axios.post(`auth/signin`, {
         username: username,
         password: password,
+        email: email
       })
       localStorage.setItem('MernAppUser', JSON.stringify(response.data))
       dispatch({
@@ -78,11 +79,12 @@ export function useProvideAuth() {
     }
   }
 
-  const signup = async (username, password, profile_image) => {
+  const signup = async (username, password, email, profile_image) => {
     try {
       await axios.post(`auth/signup`, {
         username: username,
         password: password,
+        email: email,
         profile_image: profile_image,
       })
       return await signin(username, password)
