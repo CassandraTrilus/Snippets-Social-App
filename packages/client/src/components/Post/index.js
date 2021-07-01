@@ -8,6 +8,8 @@ import {
   Figure,
   ListGroup,
   Modal,
+  OverlayTrigger,
+  Tooltip
 } from 'react-bootstrap'
 import useRouter from 'hooks/useRouter'
 import { useProvideAuth } from 'hooks/useAuth'
@@ -24,9 +26,10 @@ const initialState = {
   errorMessage: null,
 }
 export default function Post({
-  post: { _id, author, profile_image, text, comments, created, likes },
+  post: { _id, author, profile_image, text, comments, created, likes, likesList},
   detail,
-  userDetail, handleRerender,
+  userDetail, 
+  handleRerender,
 }) {
   const [confirmation, setConfirmation] = useState(false)
   const [data, setData] = useState(initialState)
@@ -117,6 +120,14 @@ export default function Post({
     setStateComments(comments)
   }, [comments])
 
+
+  // Rob/Gavin explained the logic behind rendering the tooltip like in a function below
+  const renderTooltip = (props) => (
+    <Tooltip id='button-tooltip' {...props}>
+      {likes.map((i) => {return `${i.username}, `})}
+    </Tooltip>
+  )
+
   return (
     <>
     <ListGroup.Item
@@ -192,7 +203,14 @@ export default function Post({
                 <Button variant='link' size='md' onClick={handleToggleLike}>
                   {likedState ? <LikeIconFill /> : <LikeIcon />}
                 </Button>
-                <span>{likesState}</span>
+                <OverlayTrigger
+                  key={_id}
+                  placement="bottom"
+                  delay={{ show: 250, hide: 400}}
+                  overlay={renderTooltip}
+                >
+                  <span>{likesState}</span>
+                </OverlayTrigger>
               </div>
             </div>
           </Media.Body>
