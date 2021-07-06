@@ -43,3 +43,5 @@ router.post('/', upload.single('myFile'), requireAuth, async (req, res) => {
 })
 
 module.exports = router
+
+// Mia's avatar upload demo helped a lot with this

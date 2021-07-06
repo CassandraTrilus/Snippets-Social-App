@@ -46,3 +46,6 @@ const Uploader = () => {
 }
 
 export default Uploader
+
+
+//multer syntax comes from Mike's multer demo and Mia's avatar upload demo
