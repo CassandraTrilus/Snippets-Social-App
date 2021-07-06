@@ -85,6 +85,18 @@ export default function Feed() {
     const getPosts = async () => {
       try {
         const allPosts = await axios.get('posts')
+
+        //Becky explained the logic for this in our whole group learning last Wednesday
+        allPosts.data.forEach((post) => {
+          let allLikes = []
+          post.likes.forEach((user) => {
+            allLikes.push(user.username)
+          })
+          const separatedLikes = allLikes.join(', ')
+          post.separatedLikes = separatedLikes
+        })
+
+
         setPosts(allPosts.data)
         setPostLoading(false)
       } catch (err) {
