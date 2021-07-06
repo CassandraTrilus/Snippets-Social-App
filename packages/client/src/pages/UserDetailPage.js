@@ -13,6 +13,7 @@ import { useRequireAuth } from 'hooks/useRequireAuth'
 import axios from 'utils/axiosConfig.js'
 import AvatarPicker from '../components/AvatarPicker'
 import { toast } from 'react-toastify'
+import Uploader from '../components/Uploader'
 
 export default function UserDetailPage({
   match: {
@@ -25,6 +26,7 @@ export default function UserDetailPage({
   const [loading, setLoading] = useState(true)
   const [validated, setValidated] = useState(false)
   const [open, setOpen] = useState(false)
+  const [openFile, setOpenFile] = useState(false)
   const [profileImage, setProfileImage] = useState(' ')
   const [data, setData] = useState({
     password: '',
@@ -174,6 +176,11 @@ export default function UserDetailPage({
               </div>
             </Container>
           )}
+          <div
+            onClick={() => setOpenFile(!openFile)}>
+            Upload Profile Photo
+          </div>
+          {openFile && <Uploader />}
         </Card.Body>
       </Card>
     </Container>
