@@ -54,6 +54,7 @@ router.get('/:id', async (request, response) => {
       populate: { path: 'author', select: ['username', 'profile_image'] },
     },
   ]
+
   const post = await Post.findById(request.params.id)
     .populate(populateQuery)
     .exec()

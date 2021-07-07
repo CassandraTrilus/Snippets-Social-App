@@ -80,8 +80,6 @@ export default function Post({
     handleRerender()
   }
 
-
-
   const handleCommentSubmit = async (event) => {
     const form = event.currentTarget
     event.preventDefault()
@@ -259,6 +257,7 @@ export default function Post({
                     />
                   </Figure>
                   <span>{c.text}</span>
+                  <div className='comment-timestamp' style={{padding: '15px'}}> {timeSince(c.created)} ago</div>
                 </div>
               ))}
             </Container>

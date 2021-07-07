@@ -23,6 +23,7 @@ export default function Feed() {
   const [data, setData] = useState(initialState)
   const [validated, setValidated] = useState(false)
   const [rerender, setRerender] = useState(true)
+  const [searchData, setSearchData] = useState("")
 
   const handleRerender = () => {
     setRerender(!rerender)
@@ -34,6 +35,7 @@ export default function Feed() {
       [event.target.name]: event.target.value,
     })
   }
+
 
   const handlePostSubmit = async (event) => {
     const form = event.currentTarget
@@ -85,6 +87,18 @@ export default function Feed() {
     const getPosts = async () => {
       try {
         const allPosts = await axios.get('posts')
+
+        //Becky explained the logic for this in our whole group learning last Wednesday
+        allPosts.data.forEach((post) => {
+          let allLikes = []
+          post.likes.forEach((user) => {
+            allLikes.push(user.username)
+          })
+          const separatedLikes = allLikes.join(', ')
+          post.separatedLikes = separatedLikes
+        })
+
+
         setPosts(allPosts.data)
         setPostLoading(false)
       } catch (err) {
@@ -95,6 +109,8 @@ export default function Feed() {
     }
     getPosts()
   }, [rerender])
+
+  //Jobin and Mike helped me with the ternary below in the render
 
   return (
     <>
@@ -131,14 +147,30 @@ export default function Feed() {
         </Form>
       </Container>
 
+      <Container>
+      <Form className="search-bar">
+        <input
+          placeholder="Search"
+          value={searchData}
+          onChange={(e) => setSearchData(e.target.value)}
+        />
+      </Form>
+    </Container>
+
+
       {!postLoading ? (
         <Container
           className='pt-3 pb-3'
         >
           <h6>Recent Snips</h6>
           {postError && 'Error fetching posts'}
-          {posts &&
-            posts.map((post) => <Post key={post._id} post={post} handleRerender={handleRerender} />)}
+          {posts && searchData === "" ?
+            posts.map((post) => <Post key={post._id} post={post} handleRerender={handleRerender} />) 
+            : posts.map((post) => {
+              if(post.text.includes(searchData)) {
+                return <Post key={post._id} post={post} handleRerender={handleRerender} />
+              }
+            })}
         </Container>
       ) : (
         <LoadingSpinner full />
