@@ -8,6 +8,8 @@ import {
   Figure,
   ListGroup,
   Modal,
+  OverlayTrigger,
+  Tooltip
 } from 'react-bootstrap'
 import useRouter from 'hooks/useRouter'
 import { useProvideAuth } from 'hooks/useAuth'
@@ -24,7 +26,7 @@ const initialState = {
   errorMessage: null,
 }
 export default function Post({
-  post: { _id, author, profile_image, text, comments, created, likes },
+  post: { _id, author, profile_image, text, comments, created, likes, separatedLikes },
   detail,
   userDetail, handleRerender,
 }) {
@@ -76,8 +78,6 @@ export default function Post({
     toast.success("Post deleted")
     handleRerender()
   }
-
-
 
   const handleCommentSubmit = async (event) => {
     const form = event.currentTarget
@@ -189,10 +189,24 @@ export default function Post({
                   likedState ? 'isLiked' : ''
                 }`}
               >
-                <Button variant='link' size='md' onClick={handleToggleLike}>
-                  {likedState ? <LikeIconFill /> : <LikeIcon />}
-                </Button>
-                <span>{likesState}</span>
+              <Button variant='link' size='md' onClick={handleToggleLike}>
+              {likedState ? <LikeIconFill /> : <LikeIcon />}
+              </Button>
+
+                <OverlayTrigger
+                  key={_id}
+                  placement='top'
+                  overlay={
+                    <Tooltip id = {`tooltip-${_id}`}>
+                      {separatedLikes}
+                    </Tooltip>
+                  }>
+                  <span>{likesState}</span>
+                </OverlayTrigger>
+
+
+                
+                
               </div>
             </div>
           </Media.Body>
