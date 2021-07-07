@@ -14,7 +14,7 @@ router.get('/', async (request, response) => {
     },
     {
       path: 'likes',
-      populate: { path: 'author', select: ['username', 'profile_image'] },
+      select: ['username', 'profile_image']
     }
   ]
   const posts = await Post.find({})
