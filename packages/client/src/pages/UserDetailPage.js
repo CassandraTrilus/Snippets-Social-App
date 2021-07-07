@@ -12,6 +12,7 @@ import { useProvideAuth } from 'hooks/useAuth'
 import { useRequireAuth } from 'hooks/useRequireAuth'
 import axios from 'utils/axiosConfig.js'
 import AvatarPicker from '../components/AvatarPicker'
+import { toast } from 'react-toastify'
 
 export default function UserDetailPage({
   match: {
@@ -83,7 +84,13 @@ export default function UserDetailPage({
       setValidated(false)
       // don't forget to update loading state and alert success
 
-      await axios.put(`users/${uid}`, {profile_image: profileImage, password: data.password})
+      await axios.put(`users/${uid}`, {
+        profile_image: profileImage, 
+        password: data.password
+      })
+      localStorage.clear()
+      history.push('/')
+      toast.success("Your password and avatar have been updated!")
     } catch (error) {
       setData({
         ...data,

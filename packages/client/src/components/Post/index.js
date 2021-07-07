@@ -241,6 +241,7 @@ export default function Post({
                     />
                   </Figure>
                   <span>{c.text}</span>
+                  <div className='comment-timestamp' style={{padding: '15px'}}> {timeSince(c.created)} ago</div>
                 </div>
               ))}
             </Container>
